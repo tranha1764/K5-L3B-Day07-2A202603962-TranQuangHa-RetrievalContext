@@ -1,15 +1,22 @@
 """
-Module hiện thực các bộ truy xuất (Retrievers)
-Gồm DenseRetriever kết nối với PostgreSQL pgvector từ Day 6 và OpenAI Embeddings.
+Module hiện thực các bộ truy xuất (Retrievers) cho Day 7.
+Gồm DenseRetriever (pgvector), TfidfRetriever (Lexical), và HybridRetriever (RRF).
 """
 import json
 import os
+import sys
+from pathlib import Path
 from typing import Any
 import psycopg
 from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT / "starter") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "starter"))
+from baseline import TfidfIndex
 
 
 class DenseRetriever:
@@ -136,7 +143,7 @@ class DenseRetriever:
         for r in rows:
             results.append({
                 "id": r[0],
-                "source_id": r[1],
+                "source_id": r[2],
                 "source": r[2],
                 "page": r[3],
                 "text": r[4],
@@ -145,3 +152,74 @@ class DenseRetriever:
                 "strategy": "dense_pgvector",
             })
         return results
+
+class TfidfRetriever:
+    """Bộ truy xuất từ khóa Lexical TF-IDF (Phương pháp 1)."""
+
+    def __init__(self, chunks_path: str | None = None) -> None:
+        if chunks_path is None:
+            chunks_path = os.path.join(os.path.dirname(__file__), "..", "data", "chunks.json")
+        with open(chunks_path, "r", encoding="utf-8") as f:
+            self.chunks = json.load(f)
+        self.index = TfidfIndex(self.chunks)
+
+    def search(
+        self, query: str, *, filters: dict[str, Any] | None = None, top_k: int = 3
+    ) -> list[dict[str, Any]]:
+        """Tìm kiếm từ khóa qua TF-IDF và áp dụng bộ lọc metadata (nếu có)."""
+        results = self.index.search(query, top_k=top_k)
+        if filters:
+            filtered = []
+            for r in results:
+                meta = r.get("metadata", {})
+                if all(str(meta.get(k)) == str(v) for k, v in filters.items()):
+                    filtered.append(r)
+            return filtered[:top_k]
+        return results
+
+
+class HybridRetriever:
+    """Bộ truy xuất lai Hybrid RRF kết hợp Dense Retrieval và Lexical TF-IDF (Phương pháp 3)."""
+
+    def __init__(self, dense_retriever: DenseRetriever, tfidf_retriever: TfidfRetriever) -> None:
+        self.dense = dense_retriever
+        self.tfidf = tfidf_retriever
+
+    def search(
+        self, query: str, *, filters: dict[str, Any] | None = None, top_k: int = 3
+    ) -> list[dict[str, Any]]:
+        """
+        Lấy candidate dư từ cả 2 nguồn, sau đó tính điểm Reciprocal Rank Fusion (RRF)
+        với hằng số chuẩn k = 60 để xếp hạng lại.
+        """
+        # Lấy dư ứng viên (gấp đôi top_k) để đảm bảo không bỏ sót đoạn văn tiềm năng
+        candidate_k = max(top_k * 2, 6)
+        dense_hits = self.dense.search(query, filters=filters, top_k=candidate_k)
+        tfidf_hits = self.tfidf.search(query, filters=filters, top_k=candidate_k)
+
+        # Tính điểm RRF cho từng chunk
+        rrf_scores: dict[str, float] = {}
+        chunk_map: dict[str, dict[str, Any]] = {}
+
+        for rank, hit in enumerate(dense_hits, start=1):
+            cid = hit["id"]
+            rrf_scores[cid] = rrf_scores.get(cid, 0.0) + (1.0 / (60.0 + rank))
+            chunk_map[cid] = hit
+
+        for rank, hit in enumerate(tfidf_hits, start=1):
+            cid = hit["id"]
+            rrf_scores[cid] = rrf_scores.get(cid, 0.0) + (1.0 / (60.0 + rank))
+            if cid not in chunk_map:
+                chunk_map[cid] = hit
+
+        # Sắp xếp lại theo điểm RRF giảm dần và lấy top_k cao nhất
+        sorted_cids = sorted(rrf_scores.keys(), key=lambda cid: -rrf_scores[cid])[:top_k]
+
+        results = []
+        for cid in sorted_cids:
+            item = dict(chunk_map[cid])
+            item["score"] = rrf_scores[cid]
+            item["strategy"] = "hybrid_rrf"
+            results.append(item)
+        return results
+
