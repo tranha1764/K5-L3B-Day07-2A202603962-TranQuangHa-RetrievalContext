@@ -1,0 +1,174 @@
+[
+  {
+    "id": "q01",
+    "split": "dev",
+    "question": "What is the key advice given for navigating a challenging and unpredictable college life?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q02",
+    "split": "dev",
+    "question": "In the Five Whys example, what degree does the student want to earn?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q03",
+    "split": "dev",
+    "question": "In Chapter 1, what is a key difference in preparation between college faculty and high school faculty?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q04",
+    "split": "dev",
+    "question": "What are the six adjustment areas that college students experience in their transition?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q05",
+    "split": "dev",
+    "question": "Who defined the personality trait known as 'grit' in psychology?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q06",
+    "split": "dev",
+    "question": "In Chapter 2, what four attributes make up Paul G. Stoltz's GRIT acronym?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q07",
+    "split": "dev",
+    "question": "How can having a grit partner affect a student's own determination in college?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q08",
+    "split": "dev",
+    "question": "How can keeping a journal help combat negative thoughts and self-doubt?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q09",
+    "split": "dev",
+    "question": "What is the primary benefit of adopting a growth mindset over a fixed mindset?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q10",
+    "split": "dev",
+    "question": "What legislation is highlighted for ensuring students with disabilities have equal access to higher education?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q11",
+    "split": "dev",
+    "question": "Why is visiting professors during their office hours strongly recommended?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q12",
+    "split": "dev",
+    "question": "What is the purpose of creating an environment where mistakes are considered safe?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q13",
+    "split": "dev",
+    "question": "What intellectual moment in college is described as an 'a-ha!' experience?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q14",
+    "split": "dev",
+    "question": "What did the 2007 Duckworth study reveal about individuals with high grit?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q15",
+    "split": "dev",
+    "question": "What happens when a student relies solely on a single learning style?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q16",
+    "split": "test",
+    "question": "Where does most learning take place according to the college expectations guide?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q17",
+    "split": "test",
+    "question": "How do relationships typically change and expand for students during college?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q18",
+    "split": "test",
+    "question": "In Chapter 2, how is the Myers-Briggs assessment described in terms of its application?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q19",
+    "split": "test",
+    "question": "What did the former STEM student discover when switching to studying Russian?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "q20",
+    "split": "test",
+    "question": "What ancient philosophical obsession led to modern learning theories?",
+    "answerable": true,
+    "expected_behavior": "search_and_answer"
+  },
+  {
+    "id": "unans_dev_01",
+    "split": "dev",
+    "question": "Mức học phí trung bình hàng năm của sinh viên quốc tế theo học chương trình cử nhân tại trường là bao nhiêu?",
+    "answerable": false,
+    "expected_behavior": "search_and_abstain",
+    "absence_reason": "Tài liệu 58 trang chỉ thảo luận về kỹ năng thích nghi đại học, không chứa bất kỳ bảng học phí hay thông tin học phí sinh viên quốc tế nào."
+  },
+  {
+    "id": "unans_dev_02",
+    "split": "dev",
+    "question": "Hệ thống tín chỉ ECTS của Châu Âu được chuyển đổi sang số giờ học trên lớp theo công thức nào?",
+    "answerable": false,
+    "expected_behavior": "search_and_abstain",
+    "absence_reason": "Tài liệu dựa trên bối cảnh đại học tại Mỹ và chỉ chia sẻ câu chuyện chuyển trường cá nhân chung, không đề cập đến hệ thống tín chỉ ECTS của Châu Âu."
+  },
+  {
+    "id": "unans_test_01",
+    "split": "test",
+    "question": "Quy định về việc sử dụng các công cụ trí tuệ nhân tạo tạo sinh như ChatGPT trong việc viết tiểu luận được nêu như thế nào?",
+    "answerable": false,
+    "expected_behavior": "search_and_abstain",
+    "absence_reason": "Giáo trình bản in xuất bản trước khi các công cụ Generative AI ra đời, hoàn toàn không có từ khóa ChatGPT hay Generative AI."
+  },
+  {
+    "id": "unans_test_02",
+    "split": "test",
+    "question": "Thủ tục và thời hạn nộp hồ sơ xin ở ký túc xá cho sinh viên năm nhất được hướng dẫn cụ thể ra sao?",
+    "answerable": false,
+    "expected_behavior": "search_and_abstain",
+    "absence_reason": "Tài liệu chỉ đề cập đến việc thích nghi với bạn cùng phòng và đời sống sinh viên, không cung cấp quy trình hay thời hạn thủ tục đăng ký ký túc xá."
+  }
+]
