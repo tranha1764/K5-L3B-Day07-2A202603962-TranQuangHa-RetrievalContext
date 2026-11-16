@@ -13,7 +13,7 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "starter"))
 
 from starter.agentic import run_agent
-from src.retrievers import DenseRetriever
+from src.retrievers import DenseRetriever, TfidfRetriever, HybridRetriever
 from src.controller import OpenAIController
 
 
@@ -21,6 +21,7 @@ def main():
     parser = argparse.ArgumentParser(description="Chạy Agentic RAG trên benchmark")
     parser.add_argument("--cases", type=Path, default=REPO_ROOT / "data" / "agent_cases.json")
     parser.add_argument("--split", choices=("dev", "test"), default="dev")
+    parser.add_argument("--strategy", choices=("hybrid", "dense", "tfidf"), default="hybrid", help="Chiến lược retrieval")
     parser.add_argument("--limit", type=int, default=None, help="Số câu tối đa để chạy thử")
     parser.add_argument("--max-searches", type=int, default=3)
     parser.add_argument("--top-k", type=int, default=3)
@@ -29,11 +30,17 @@ def main():
     args = parser.parse_args()
 
     print("====================================================")
-    print(f"   CHẠY AGENTIC RAG — SPLIT: {args.split.upper()}   ")
+    print(f"   CHẠY AGENTIC RAG — SPLIT: {args.split.upper()} ({args.strategy})   ")
     print("====================================================")
 
-    # 1. Khởi tạo Retriever và Controller
-    retriever = DenseRetriever()
+    # 1. Khởi tạo Retriever tương ứng và Controller
+    if args.strategy == "dense":
+        retriever = DenseRetriever()
+    elif args.strategy == "tfidf":
+        retriever = TfidfRetriever()
+    elif args.strategy == "hybrid":
+        retriever = HybridRetriever(DenseRetriever(), TfidfRetriever())
+
     controller = OpenAIController()
 
     # 2. Nạp câu hỏi theo split
